@@ -5,7 +5,7 @@
 
 {{$course}}
 
-{{$validation}}
+{{$validation['name']}}
 
 
 
