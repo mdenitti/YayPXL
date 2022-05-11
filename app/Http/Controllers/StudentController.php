@@ -22,7 +22,7 @@ class StudentController extends Controller
     }
 
     public function store (Request $request) {
-    //    dd($request->name);
+    // dd($request);
     //    $student = new Student;
     //    $student->name = $request->name;
     //    $student->email = $request->email;
@@ -36,8 +36,15 @@ class StudentController extends Controller
         'email' => 'required | email',
         'phone' => 'required | max:400',
         'bdate' => 'required',
-        'course' => 'required'
+        'course' => 'required',
+        'profilepic' => 'required|max:2048'
     ]);
+
+
+    $timestamp = now()->timestamp;
+    $filename = $timestamp.'_'.$request->profilepic->GetClientOriginalName();
+  
+
 
     // then we store, if e-mail is non existant
     //dd($validation); 
@@ -47,8 +54,12 @@ class StudentController extends Controller
             'name' => $request->input('name'), 
             'email' => $request->input('email'), 
             'phone' => $request->input('phone'), 
-            'bdate' => $request->input('bdate')
+            'bdate' => $request->input('bdate'),
+            'profilepic' => $filename
         ]);
+
+        // ONE FINAL UPLOAD STEP...
+        $request->profilepic->move(public_path('storage'),$filename);
 
         // we check if succes and do something...
         if($student->wasRecentlyCreated) {

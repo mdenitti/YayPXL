@@ -11,7 +11,7 @@
         </ul>
     </div>
 @endif
-<form method="post" action="/students">
+<form method="post" action="/students" enctype="multipart/form-data">
 @csrf
 <div class="form-group">
         <label for="">Uw volledige naam</label>
@@ -28,6 +28,11 @@
         <div class="form-group mt-3">
         <label for="">Telefoon</label>
         <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
+        </div>
+
+         <div class="form-group mt-3">
+        <label for="">Profielfoto opladen</label>
+        <input type="file" class="form-control" name="profilepic">
         </div>
 
        <div class="form-group mt-3">
