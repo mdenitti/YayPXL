@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
-
+use App\Http\Controllers\ContactController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,6 +47,16 @@ Route::get('/signup', function () {
 });
 
 
+// Mail::raw -> use case: internal notification system...
+Route::get('/mailtest', function () {
+   $test =  Mail::raw('bonjour', function ($message){
+        $message->subject('Email de test')
+        ->to('test@YayPXL.be');
+    });
+    dd($test);
+});
+
+// Expose a public API
 
 // routes courses
 Route::get('/courses', function () {
@@ -67,6 +77,8 @@ Route::get('/locations', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
+Route::post('/contact',[ContactController::class,'store']);
+
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
