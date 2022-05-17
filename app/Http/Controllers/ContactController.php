@@ -20,11 +20,18 @@ class ContactController extends Controller
         Contact::Create($validate);
         //Yoohoo mails
 
-        Mail::raw('YooHoo: '.request('question') .' - '.request('phone'), function($message){ $message->to(request('email'))
-        ->subject('Vraag van: ' . request('name'));
-        });
+        // Plain old, text mails... for internal use only
+        // Mail::raw('YooHoo: '.request('question') .' - '.request('phone'), function($message){ $message->to(request('email'))
+        // ->subject('Vraag van: ' . request('name'));
+        // });
 
-        return view('contact.yay')->with('message','Email send to the administrators'); 
+        Mail::send('mails.contact', $validate, function($message){ $message->to(request('email'))
+            ->subject('Vraag van: ' . request('name')); });
+            return view('contact.yay',$validate)->with('message','Email send to the administrators'); // session var 'message'
+        
+        // optional, post our contactinfo to an external API... Http::post facade
+        // $response = Http::post('https://reqres.in/api/users',$validate);
+    
         // session var 'message'
         }
 }
