@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Mail;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class ContactController extends Controller
 {
@@ -27,11 +29,16 @@ class ContactController extends Controller
 
         Mail::send('mails.contact', $validate, function($message){ $message->to(request('email'))
             ->subject('Vraag van: ' . request('name')); });
-            return view('contact.yay',$validate)->with('message','Email send to the administrators'); // session var 'message'
+
+            toast('Yay','success')->autoClose(5000)->position('top-end');
+            Alert::success('Success Title', 'Success Message');
+            return view('contact.yay',$validate);
         
         // optional, post our contactinfo to an external API... Http::post facade
         // $response = Http::post('https://reqres.in/api/users',$validate);
     
         // session var 'message'
+        
         }
+        
 }

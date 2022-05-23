@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Course;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
     public function showAll() {
         // $result = \DB::table('student')->get();
-        $result = Student::get();
+        //$result = Student::get();
         //dd($result);
-        return view('students',['students' => $result]);
+        //return view('students',['students' => $result]);
+
+        $result = User::find(Auth::user()->id);
+        return view('students',['student' => $result]);
     }
 
     public function showStudent($id) {

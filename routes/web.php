@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ContactController;
+use RealRashid\SweetAlert\Facades\Alert;
+use Carbon\Carbon;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +17,28 @@ use App\Http\Controllers\ContactController;
 |
 */
 
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
 Route::get('/', function () {
-    return view('welcome');
+    $results = App\Models\Student::with('course')->get();
+    $response = Http::get('https://api.openweathermap.org/data/2.5/weather?q=genk&appid=0404c984d549fe4cdedaf43613488470&units=metric');
+    $weather = $response->json();
+    //dd($weather);
+    $nowtime = Carbon::now();
+    //$time = Carbon::create('first day of december 2022')->addDays(30)->format('d/m/Y');
+    
+    $time_one = Carbon::create('25 december 2022');
+    $time_two = Carbon::now();
+
+    $time = $time_one->diffInSeconds($time_two);
+
+
+    return view('welcome',compact('results','weather','time'));
 });
 
 Route::get('/test', function () {
@@ -35,7 +58,7 @@ Route::get('/test/{id}',function ($id) {
 });
 
 // routes students
-Route::get('/students',[StudentController::class,'showAll']);
+Route::get('/students',[StudentController::class,'showAll'])->middleware('auth');
 Route::get('/student/{id}',[StudentController::class,'showStudent']);
 
 Route::post('/students',[StudentController::class,'store']);
