@@ -21,4 +21,20 @@ class StudentTest extends TestCase
         $response = $this->get('/contact');
         $response->assertStatus(200);
     }
+
+    public function test_contact_content()
+    {
+        $response = $this->get('/contact');
+        $response->assertSee('volledige');
+        
+    }
+
+    public function test_security() {
+        // Check if route viewable without login - 303 redirect alles na /admin route 
+        $response = $this->get('/students');
+        $response->assertStatus(302);
+        }
+
+
+    
 }
