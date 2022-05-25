@@ -19,7 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Expose quickly our course offering to third parties 
-Route::get('/courses', function(){
+Route::middleware('auth:sanctum')->get('/courses', function(){
     $api = Course::get()->toJson();
     return $api;
     }); 
+
+

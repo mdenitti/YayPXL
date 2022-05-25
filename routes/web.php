@@ -5,6 +5,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ContactController;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use App\Models\Student;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,22 @@ Route::get('/test/{id}',function ($id) {
 });
 
 // routes students
+
+Route::get('studentpdf/{id}',function ($id) {
+    $student = Student::where('id', $id)->with('course')->first(); 
+    //dd($student);
+    // PDF helper - create view - loadview and display data - download the pdf with data
+    
+    // PDF generation
+    $pdf = PDF::loadView('studentpdf',compact('student'));
+
+    // PDF downloads
+    return $pdf->download('student'.$id.'.pdf');
+    // PDF open in new tab... this
+    // return $pdf->stream('student'.$id.'.pdf');
+})->middleware('auth');
+
+
 Route::get('/students',[StudentController::class,'showAll'])->middleware('auth');
 Route::get('/student/{id}',[StudentController::class,'showStudent']);
 
@@ -105,4 +123,11 @@ Route::post('/contact',[ContactController::class,'store']);
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+});
+
+
+Route::get('/tokens/create/{id}', function ($id) {
+    $token = User::find($id)->createToken('access');
+    //dd($request);
+    return ['token' => $token->plainTextToken];
 });

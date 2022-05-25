@@ -4,7 +4,14 @@
 
 @section('page_header')
     <h1 class="page-title">
+        {{$dataTypeContent->getKey()}}
         <i class="{{ $dataType->icon }}"></i> {{ __('voyager::generic.viewing') }} {{ ucfirst($dataType->getTranslatedAttribute('display_name_singular')) }} &nbsp;
+
+         @can('edit', $dataTypeContent)
+            <a href="/studentpdf/{{$dataTypeContent->getKey()}}" class="btn btn-danger">
+                <i class="glyphicon glyphicon-duplicate"></i> <span class="hidden-xs hidden-sm">Download PDF</span>
+            </a>
+        @endcan
 
         @can('edit', $dataTypeContent)
             <a href="{{ route('voyager.'.$dataType->slug.'.edit', $dataTypeContent->getKey()) }}" class="btn btn-info">
